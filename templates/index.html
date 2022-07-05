@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Car Price Prediction</title>
+        <link rel="stylesheet" href="/static/style.css">
+
+    </head>
+    <body>
+        <h2>Car Price Prediction System</h2>
+        <form method="POST" accept-charset="utf-8">
+            <table cellpadding="10" cellspacing="2" align="center">
+
+                <tr>
+                    <td class="col1">Select The Brand Name</td>
+                    <td class="col2">
+                        <select name="company" id="company" required="1">
+                            {% for company in companies %}
+                            <option value="{{ company }}">{{ company }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">Models</td>
+                    <td class="col2">
+                        <select name="model_name" id="car_model" required="1">
+                            {% for model_name in car_models %}
+                            <option value="{{ model_name }}">{{ model_name }}</option>
+                            {% endfor %}
+
+
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">Select Year</td>
+                    <td class="col2">
+                        <select name="year" id="year">
+                            {% for year in years %}
+                            <option value="{{ year }}">{{year }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">Fuel Type</td>
+                    <td class="col2">
+                        <select name="fuel_type" id="fuel_type">
+                            {% for fuel_type in fuel_types %}
+                            <option value="{{ fuel_type }}">{{ fuel_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col1">Kilometre Traveled:</td>
+                    <td class="col2">
+                        <input type="text" id="kilometre_traveled"
+                            placeholder="Kilometre Traveled"
+                            name="kilometre_travel">
+                    </td>
+                </tr>
+                <tr colspan="2" align="center">
+                    <td>
+                        <button type="submit"
+                            onclick="send_data()">Submit</button>
+                    </td>
+                    <td>
+                        <button type="reset" class="reset1"
+                            onclick="reset_data()">Clear</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div style="color: red; text-align: center;">
+            <h2> <span id="predict" style="color: red;"></span></h2>
+        </div>
+        <script>
+            function form_handelar(event)
+            {
+                event.preventDefault();
+            }
+           
+            function send_data()
+            {
+                console.log("Ayan");
+               document.querySelector('form').addEventListener("submit", form_handelar);
+               var fd = new FormData(document.querySelector('form'));
+               var xhr = new XMLHttpRequest({mozSystem: true});
+               xhr.open('POST','/predict',true);
+               document.getElementById('predict').innerHTML = "Please Wait...";
+               xhr.onreadystatechange = function() 
+               {
+                    if(xhr.readyState == XMLHttpRequest.DONE) 
+                    {
+                        document.getElementById('predict').innerHTML = "Price is :- " + xhr.responseText;
+                    }
+                };
+                xhr.onload = function(){};
+                xhr.send(fd);
+            }
+            function reset_data()
+            {
+                document.getElementById('company') = "";
+                document.getElementById('car_model')= "";
+                document.getElementById('fuel_type') = "";
+                document.getElementById('year') = "";
+                document.getElementById('kilometre_traveled').innerHTML = "";
+            }
+    
+        </script>
+    </body>
+
+</html>
